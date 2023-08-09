@@ -1,0 +1,5 @@
+name: 'Gitea Template Action'
+description: 'Action for creating repositories from templates with additional variables'
+runs:
+  using: 'go'
+  main: 'main.go'
