@@ -4,7 +4,9 @@ import (
 	"code.gitea.io/sdk/gitea"
 	"fmt"
 	gha "github.com/sethvargo/go-githubactions"
+	"io/fs"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -29,16 +31,12 @@ func main() {
 	_ = r.Description
 	fmt.Println(r.Description)
 
-	files, err := os.ReadDir(ctx.Workspace)
-	if err != nil {
-		gha.Fatalf("failed to ReadDir: %v", err)
-	}
-
-	for _, s := range files {
-		if s.IsDir() == false {
-			fmt.Println(s.Name())
+	filepath.WalkDir(ctx.Workspace, func(path string, d fs.DirEntry, err error) error {
+		if d.IsDir() == false {
+			fmt.Println(path, d.Name())
 		}
-	}
+		return nil
+	})
 
 	env := os.Environ()
 	for _, s := range env {
