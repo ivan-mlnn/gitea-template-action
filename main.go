@@ -32,9 +32,14 @@ func main() {
 	fmt.Println(r.Description)
 
 	filepath.WalkDir(ctx.Workspace, func(path string, d fs.DirEntry, err error) error {
+		if d.Name() == ".git" {
+			return fs.SkipDir
+		}
+
 		if d.IsDir() == false {
 			fmt.Println(path, d.Name())
 		}
+
 		return nil
 	})
 
